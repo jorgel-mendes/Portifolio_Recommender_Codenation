@@ -1,5 +1,5 @@
-# Portifolio_Recommender_Codenation
-Final project from Codenation Data science aceleration, a portifolio recommender
+# Lead recommender
+Final project from Codenation Data science aceleration, a portifolio recommender.
 
 
 Esta é a minha solução para o desafio final da codenation, com um algoritmo de recomendação para possíveis leads.
