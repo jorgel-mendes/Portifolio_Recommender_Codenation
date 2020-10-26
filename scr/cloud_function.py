@@ -2,7 +2,6 @@
 
 import pandas as pd
 import numpy as np
-import json
 
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
@@ -19,13 +18,11 @@ def main(portifolio):
     n_recommendations -- Number of recommendations returned.
     market_initial -- Data frame with companies in the market.
     """
-    from requests import get
-    from zipfile import ZipFile
-    from io import BytesIO
-
-    remotezip = get("https://codenation-challenges.s3-us-west-1.amazonaws.com/ml-leads/estaticos_market.csv.zip")
-    root = ZipFile(BytesIO(remotezip.content))
-    market_initial =  pd.read_csv(root.open('estaticos_market.csv')) 
+    # TODO: remove try/except and dev
+    try:
+        market_initial = pd.read_csv("https://raw.githubusercontent.com/jorgel-mendes/Portifolio_Recommender_Codenation/master/data/market_demo.csv")
+    except:
+        market_initial = pd.read_csv("https://raw.githubusercontent.com/jorgel-mendes/Portifolio_Recommender_Codenation/dev/data/market_demo.csv")
     
     n_recommendations = portifolio["n_recommendations"]
     portifolio = pd.DataFrame({'id': portifolio['id']})
@@ -33,11 +30,8 @@ def main(portifolio):
     # Dropping columns with ids
     market_reduced = market_initial.drop(['Unnamed: 0', 'id'], axis=1)
     
-    del remotezip
-    del root
     # Dropping columns with more than 90% NAs
     isna_columns = market_reduced.isna().sum().sort_values(ascending=False)
-    return portifolio.to_dict()
     isna_columns = isna_columns[isna_columns > 462298*.9].index
     market_reduced.drop(isna_columns, axis=1, inplace=True)
     
