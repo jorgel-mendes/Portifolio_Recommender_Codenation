@@ -1,5 +1,5 @@
-#TODO: Profile to reduce memory usage
-
+#Code as it is on ibm cloud functions. 
+# Slightly different from the notebook implementation because it had to comply with cloud function's requirements.
 import pandas as pd
 import numpy as np
 
@@ -14,11 +14,9 @@ def main(portifolio):
     """Get n leads recommendations from a certain marketing based on a provided portifolio.
     
     Arguments:
-    portifolio -- Data frame with user's portifolio. Companies in the portifolio should be in the market Data frame.
-    n_recommendations -- Number of recommendations returned.
-    market_initial -- Data frame with companies in the market.
+    portifolio -- Dictonary with user's portifolio and number of recommendations. 
+    Companies in the portifolio should be in the market_demo Data frame.
     """
-    # TODO: remove try/except and dev
     try:
         market_initial = pd.read_csv("https://raw.githubusercontent.com/jorgel-mendes/Portifolio_Recommender_Codenation/master/data/market_demo.csv")
     except:
@@ -34,7 +32,6 @@ def main(portifolio):
     isna_columns = market_reduced.isna().sum().sort_values(ascending=False)
     isna_columns = isna_columns[isna_columns > 462298*.9].index
     market_reduced.drop(isna_columns, axis=1, inplace=True)
-    
     # Dropping columns with  more than 90% with the same category
     market_counts = market_initial.apply(lambda x: pd.value_counts(x).max())
     market_reduced.drop(market_counts[market_counts > 462298*.90].index, axis = 1, inplace=True)
@@ -76,21 +73,17 @@ def main(portifolio):
     # Defining the values with the portifolio companies
     selected_companies = portifolio['id']
     test_indexes = market_initial[market_initial['id'].isin(selected_companies)].index
-    
     # Preprocessing and pca transformation
     pca_model = full_pipeline.fit(market_reduced.iloc[test_indexes])
     market_transformed = pca_model.transform(market_reduced)
     portifolio_transformed = pca_model.transform(market_reduced.iloc[test_indexes])
-    
     # Calculating the distance data frame
     distance_result = [pd.Series(np.linalg.norm((market_transformed - portifolio_transformed[test_index]), axis=1)) 
     for test_index in range(len(portifolio_transformed))]
-
     distance_result_df = pd.concat(distance_result, axis=1)
     distance_result_df.drop(test_indexes, inplace=True)
-    
     # Selecting 
     result_rank = distance_result_df.rank().min(axis=1).sort_values()
     result_indexes = result_rank[0:n_recommendations].index
-    
-    return market_initial.iloc[result_indexes, :].to_dict()
+
+    return market_initial.iloc[result_indexes, 2:3].to_dict()

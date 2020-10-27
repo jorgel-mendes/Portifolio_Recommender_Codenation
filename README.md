@@ -1,15 +1,21 @@
 # Lead recommender
-Final project from Codenation Data science aceleration, a portifolio recommender.
+Final project from Codenation Data science aceleration, a lead recommender. Based on a existinh market and a portifolio of clients the goal is to recommend possible business leads.
+
+Recommendation is based on how similar the companies are, using a distance algorithm. Then the companies closer to the ones in the portifolio are recommended as possible leads.
+
+The model was constructed with pandas, numpy and scikit-learn. Similarity was calculated through Euclidian distance after a PCA dimensionality reduction.
+
+Results were deployed on google colab, and a small demo of the algorithm was created with IBM Cloud Functions. Both usages are demonstrated in the notebook Recommender Example.
+
+A small sample of the data is on this repository, as well as a portifolio example and a notebook with the EDA process.
 
 
-Esta é a minha solução para o desafio final da codenation, com um algoritmo de recomendação para possíveis leads.
+## TODO List
 
-A recomendação é feita baseada na similaridade das empresas. São alimentados algumas empresas do portifólio do cliente para o modelo e então as empresas mais próximas são indicadas como possíveis leads.
+This project is also a collection of my studies so improvements will be made as I study more. Probable order of improvements are:
 
-O modelo utiliza as bibliotecas pandas, numpy e scikit-learn para pré processamento e criação do modelo. A similaridade é calculada através de distância Euclidiana, após uma redução de dimensionalidade por PCA.
-
-Os resultados foram feitos no Google Colab por limitações de hardware e facilidade de compartilhamento.
-
-No notebook Recommender_Example são utilizados os dados do portifólio 2 para demonstração do problema, utilizando o modelo de Modelo_desafio_final.py.
-
-A análise exploratória com um maior estudo sobre as variáveis e o baseline do modelo se encontram em EDA.ipynb
+* Creation of a Streamlit App.
+* Reorganization of the EDA.
+* Remake readme and overall visual.
+* Rethink where the model is hosted. I'm not sure cloud function is the best solution for this kind of model.
+* Improve the model.
